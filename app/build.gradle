@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+def localProp = new Properties()
+File file = rootProject.file('local.properties')
+if (file.exists()) {
+    def inputStream = project.rootProject.file('local.properties').newDataInputStream()
+    localProp.load(inputStream)
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "cc.foxa.kie"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def UMENG_APPKEY = localProp.containsKey("UMENG_APPKEY") ?
+                localProp.getProperty("UMENG_APPKEY") : System.getenv("UMENG_APPKEY")
+        def UMENG_MESSAGE_SECRET = localProp.containsKey("UMENG_MESSAGE_SECRET") ?
+                localProp.getProperty("UMENG_MESSAGE_SECRET") : System.getenv("UMENG_MESSAGE_SECRET")
+        def XIAOMI_APPID = localProp.containsKey("XIAOMI_APPID") ?
+                localProp.getProperty("XIAOMI_APPID") : System.getenv("XIAOMI_APPID")
+        def XIAOMI_APPKEY = localProp.containsKey("XIAOMI_APPKEY") ?
+                localProp.getProperty("XIAOMI_APPKEY") : System.getenv("XIAOMI_APPKEY")
+        buildConfigField "String", "UMENG_APPKEY", UMENG_APPKEY
+        buildConfigField "String", "UMENG_MESSAGE_SECRET", UMENG_MESSAGE_SECRET
+        buildConfigField "String", "XIAOMI_APPID", XIAOMI_APPID
+        buildConfigField "String", "XIAOMI_APPKEY", XIAOMI_APPKEY
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //基础组件库依赖(必须) Push 6.1.0版本必须升级新版本Common SDK
+    implementation 'com.umeng.umsdk:common:9.1.0'
+    implementation 'com.umeng.umsdk:utdid:1.5.2'
+    implementation 'com.umeng.umsdk:asms:1.1.3'
+    implementation 'com.umeng.umsdk:crash:0.0.4'
+
+    //友盟push相关依赖(必须)
+    implementation 'com.umeng.umsdk:push:6.1.0'
+
+    implementation 'com.umeng.umsdk:alicloud-httpdns:1.2.5'
+    implementation 'com.umeng.umsdk:alicloud-utils:1.1.5'
+    implementation 'com.umeng.umsdk:alicloud_beacon:1.0.1'
+
+    implementation 'com.umeng.umsdk:agoo-accs:3.3.8.8-open-fix2'
+    implementation 'com.umeng.umsdk:agoo_networksdk:3.5.5'
+    implementation 'com.umeng.umsdk:agoo_tlog:3.0.0.17'
+    implementation 'com.umeng.umsdk:agoo_tnet4android:3.1.14.9'
+
+    implementation 'com.umeng.umsdk:xiaomi-push:3.7.0'
+    implementation 'com.umeng.umsdk:xiaomi-umengaccs:1.1.4'
+
+
+}

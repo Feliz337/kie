@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">kie</string>
+    <string name="notify_click_activity_title">Notify Click Activity</string>
+</resources>
