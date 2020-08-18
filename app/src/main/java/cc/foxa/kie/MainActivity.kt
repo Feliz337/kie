@@ -106,12 +106,19 @@ class MainActivity : BaseActivity() {
 
 
 
+    }
 
+    override fun onPause() {
+        super.onPause()
+        preferences.pushEnabled = viewModel.overviewPushEnabled.value!!
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.refresh()
         viewModel.setDeviceToken(deviceToken)
+        viewModel.pushStateFromSP = preferences.pushEnabled
     }
+
+
 }
